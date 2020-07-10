@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
 
-            Toast.makeText(this,"Note not Saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Note not Saved AC",Toast.LENGTH_SHORT).show();
         }
     }
 }
