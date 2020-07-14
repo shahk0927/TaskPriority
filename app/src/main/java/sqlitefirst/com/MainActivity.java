@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int ADD_NOTE_REQUEST = 1;
 
+    RelativeLayout relativeLayout;
+    TextView tvpriority, tvtitle, tvdescription;
     public static final int EDIT_NOTE_REQUEST = 2;
     private NoteViewModel noteViewModel;
     @Override
@@ -42,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FloatingActionButton buttonAddNote = findViewById(R.id.btn_add_note);
+
+        relativeLayout = findViewById(R.id.rl_note);
+        tvpriority = findViewById(R.id.text_view_priority);
+        tvtitle = findViewById(R.id.text_view_title);
+        tvdescription = findViewById(R.id.text_view_description);
+
 
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,16 +71,20 @@ public class MainActivity extends AppCompatActivity {
         final NoteAdapter adapter = new NoteAdapter();
         recyclerView.setAdapter(adapter);
 
+
+        final long ans = adapter.getItemId(1);
+       // adapter.
+
+
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
                 //update recyclerview
                 adapter.submitList(notes);
+
             }
         });
-
-      final int i =adapter.getItemCount();
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
@@ -111,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
                         noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
                         Toast.makeText(MainActivity.this,"Deleted",Toast.LENGTH_SHORT).show();
 
+                        //adapter.notifyDataSetChanged();
+                    /**    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);*/
                     }
                 });
 
@@ -119,14 +140,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-
-
                         noteViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-
                         noteViewModel.insert(note);
                        // noteViewModel.insert(adapter.getNoteAt(viewHolder.getAdapterPosition()));
-
-
                         Toast.makeText(MainActivity.this,"Cancelled",Toast.LENGTH_SHORT).show();
                         dialogInterface.dismiss();
                     }
@@ -149,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -158,9 +175,13 @@ public class MainActivity extends AppCompatActivity {
             String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
             String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
             int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY,1);
+
+
             final Note note = new Note(title, description, priority);
             noteViewModel.insert(note);
-            Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Note Saved"+priority,Toast.LENGTH_SHORT).show();
+
+
 
         }
         else if(requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK){
@@ -185,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Note not Saved",Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -229,4 +251,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

@@ -1,9 +1,13 @@
 package sqlitefirst.com;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,11 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
 
+    Context mContext;
 
     private OnItemClickListener listener;
 
     public NoteAdapter() {
         super(DIFF_CALLBACK);
+
     }
 
     private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
@@ -40,12 +46,34 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     @NonNull
     @Override
     public NoteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        mContext = parent.getContext();
+
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_item,parent, false);
         return new NoteHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
+
+        if(position==0 || position==1 || position==2){
+            holder.rlNote.setBackgroundColor(Color.GREEN);
+            holder.textViewTitle.setTextColor(Color.WHITE);
+            holder.textViewDescription.setTextColor(Color.WHITE);
+            holder.textViewPriority.setTextColor(Color.WHITE);
+        }
+        else{
+            holder.rlNote.setBackgroundColor(Color.WHITE);
+            holder.textViewTitle.setTextColor(Color.BLACK);
+            holder.textViewDescription.setTextColor(Color.BLACK);
+            holder.textViewPriority.setTextColor(Color.BLACK);
+        }
+
+      //  holder.textViewTitle.setAnimation(AnimationUtils.loadAnimation(holder.mContext,R.anim.fadeanim));
+        //holder.rlNote.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fadeanim));
+        holder.textViewTitle.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.titledescriptionanim));
+        holder.textViewDescription.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.titledescriptionanim));
+        holder.textViewPriority.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.priorityanim));
 
         Note currentNote = getItem(position);
         holder.textViewTitle.setText(currentNote.getTitle());
@@ -61,16 +89,20 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     }
 
     class NoteHolder extends RecyclerView.ViewHolder{
+        RelativeLayout rlNote;
         private TextView textViewTitle;
         private TextView textViewDescription;
         private TextView textViewPriority;
 
 
+
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
+            rlNote=itemView.findViewById(R.id.rl_note);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription=itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
+//            this.mContext = mContext.getApplicationContext();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
