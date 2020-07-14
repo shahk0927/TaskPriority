@@ -18,8 +18,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
+        android:elevation="20dp"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="42dp"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
     android:layout_marginTop="8dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+
+        android:padding="30dp">
 
         <TextView
             android:id="@+id/text_view_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+
+            android:fontFamily="@font/montserrat"
             android:text="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
@@ -23,7 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
+            android:fontFamily="@font/montserrat"
             android:maxLines="1"
+            android:layout_marginEnd="30dp"
             android:layout_toStartOf="@id/text_view_priority"
             android:layout_alignParentStart="true"
             android:ellipsize="end"
@@ -33,6 +43,7 @@
             android:id="@+id/text_view_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
             android:layout_below="@id/text_view_title"
             android:text="Description"/>
 
