@@ -56,21 +56,6 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
 
-        if(position==0 || position==1 || position==2){
-            holder.rlNote.setBackgroundColor(Color.GREEN);
-            holder.textViewTitle.setTextColor(Color.WHITE);
-            holder.textViewDescription.setTextColor(Color.WHITE);
-            holder.textViewPriority.setTextColor(Color.WHITE);
-        }
-        else{
-            holder.rlNote.setBackgroundColor(Color.WHITE);
-            holder.textViewTitle.setTextColor(Color.BLACK);
-            holder.textViewDescription.setTextColor(Color.BLACK);
-            holder.textViewPriority.setTextColor(Color.BLACK);
-        }
-
-      //  holder.textViewTitle.setAnimation(AnimationUtils.loadAnimation(holder.mContext,R.anim.fadeanim));
-        //holder.rlNote.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fadeanim));
         holder.textViewTitle.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.titledescriptionanim));
         holder.textViewDescription.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.titledescriptionanim));
         holder.textViewPriority.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.priorityanim));
