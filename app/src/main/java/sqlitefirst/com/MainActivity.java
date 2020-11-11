@@ -4,14 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,18 +38,29 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final int ADD_NOTE_REQUEST = 1;
 
     RelativeLayout relativeLayout;
     TextView tvpriority, tvtitle, tvdescription;
     public static final int EDIT_NOTE_REQUEST = 2;
+    public static Handler handler;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private NoteViewModel noteViewModel;
+    SharedPref sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = new SharedPref(this);
+        themeMethod();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         FloatingActionButton buttonAddNote = findViewById(R.id.btn_add_note);
 
@@ -215,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -246,11 +263,46 @@ public class MainActivity extends AppCompatActivity {
 
                 builder.create().show();
                 return true;
+
+            case R.id.settings:
+                Intent intent = new Intent(MainActivity.this, SetttingsActivity.class);
+                startActivity(intent);
+                //recreate();
             default:
                 return super.onOptionsItemSelected(item);
         }
 
     }
 
+    public void themeMethod(){
 
+        SetttingsActivity.onActivityCreateSetTheme(this);
+
+        if(sharedPreferences.loadNightModeState()==false){
+
+            setTheme(R.style.AppTheme);
+            //recreate();
+        }
+        else{
+            setTheme(R.style.DarkAppTheme);
+            //recreate();
+        }
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(swipeRefreshLayout.isRefreshing()) {
+
+                    swipeRefreshLayout.setRefreshing(false);
+                    recreate();
+                }
+            }
+        }, 1);
+    }
 }

@@ -1,14 +1,24 @@
 package sqlitefirst.com;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
@@ -20,18 +30,29 @@ public class AddEditNoteActivity extends AppCompatActivity {
     public static final String EXTRA_PRIORITY="sqlitefirst.com.EXTRA_PRIORITY";
     private EditText editTextTitle, editTextDescription;
     private NumberPicker numberPickerPriority;
+    private LinearLayout addNoteLL;
+    SharedPref sharedPreferences;
+    private Button tpAddBtn;
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = new SharedPref(this);
+        themeMethod();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
         editTextTitle = findViewById(R.id.et_title);
         editTextDescription = findViewById(R.id.et_text_description);
+        addNoteLL = findViewById(R.id.addTaskLL);
+        addNoteLL.setClickable(true);
         numberPickerPriority = findViewById(R.id.number_picker_priority);
-
+        tpAddBtn = findViewById(R.id.tpAddBtn);
         numberPickerPriority.setMinValue(1);
+        editTextTitle.requestFocus();
+        editTextTitle.setFocusable(true);
         numberPickerPriority.setMaxValue(10);
 
+        //numberPickerPriority.setTextColor(R.color.colorWhite);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         Intent intent = getIntent();
@@ -47,16 +68,22 @@ public class AddEditNoteActivity extends AppCompatActivity {
             setTitle("Add Note");
         }
 
+        tpAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveNote();
+            }
+        });
     }
 
-    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.add_note_menu,menu);
         return true;
     }
 
-    @Override
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()){
@@ -66,7 +93,14 @@ public class AddEditNoteActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
+ @Override
+ public void onUserInteraction() {
+     if (getCurrentFocus() != null) {
+         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+     }
+ }
 
     private void saveNote() {
 
@@ -74,9 +108,9 @@ public class AddEditNoteActivity extends AppCompatActivity {
         String description = editTextDescription.getText().toString();
         int priority = numberPickerPriority.getValue();
 
-        if(title.trim().isEmpty()||description.trim().isEmpty()){
+        if(title.trim().isEmpty()){
 
-            Toast.makeText(this,"Please insert Title and Description",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Title required",Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -94,4 +128,21 @@ public class AddEditNoteActivity extends AppCompatActivity {
         setResult(RESULT_OK, data);
         finish();
     }
+
+    public void themeMethod(){
+
+        SetttingsActivity.onActivityCreateSetTheme(this);
+        if(sharedPreferences.loadNightModeState()==false){
+
+            setTheme(R.style.AppTheme);
+            //recreate();
+        }
+        else{
+            setTheme(R.style.DarkAppTheme);
+            //recreate();
+        }
+
+    }
+
+
 }
