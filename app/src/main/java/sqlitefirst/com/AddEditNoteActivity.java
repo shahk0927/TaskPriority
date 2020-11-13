@@ -43,8 +43,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
         editTextTitle = findViewById(R.id.et_title);
         editTextDescription = findViewById(R.id.et_text_description);
-        addNoteLL = findViewById(R.id.addTaskLL);
-        addNoteLL.setClickable(true);
+
         numberPickerPriority = findViewById(R.id.number_picker_priority);
         tpAddBtn = findViewById(R.id.tpAddBtn);
         numberPickerPriority.setMinValue(1);
@@ -94,13 +93,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }*/
- @Override
- public void onUserInteraction() {
-     if (getCurrentFocus() != null) {
-         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-     }
- }
 
     private void saveNote() {
 

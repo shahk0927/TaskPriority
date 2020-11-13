@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/backgroundColor"
+    android:background="?attr/backgroundMainColor"
     android:id="@+id/addTaskLL"
     android:padding="16dp"
     tools:context=".AddEditNoteActivity">
@@ -47,7 +47,7 @@
         android:id="@+id/selectPriorityLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/backgroundColor"
+        android:background="?attr/backgroundMainColor"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
