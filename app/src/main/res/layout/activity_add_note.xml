@@ -82,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="15dp"
+        android:textColor="?attr/backgroundColor"
         android:background="@drawable/btn_gradient_style"
         android:fontFamily="@font/montserrat"
         android:padding="18dp"
